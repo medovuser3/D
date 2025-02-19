@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install wget
-        run: sudo apt-get install -y wget  # Устанавливаем wget
+        run: sudo apt-get update && sudo apt-get install -y wget  # Устанавливаем wget
 
       - name: Download target.txt
         run: wget "https://www.dropbox.com/scl/fi/fzsgzpi61k4487c2xj32w/target.txt?rlkey=ihrzjcg5sn18uuo0zibg9faxy&st=hrf9dyd1&dl=1" -O target.txt
